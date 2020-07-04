@@ -55,6 +55,7 @@ namespace s17624_APBD_KolokwiumPoprawa.Services
         {
             var eq = dbContext.Actions.Where(a => a.IdAction == request.IdAction && a.EndTime == null).FirstOrDefault();
 
+            //Check if action is available
             if (eq == null)
             {
                 throw new Exception("Action doesn't exists or is closed");
@@ -62,9 +63,7 @@ namespace s17624_APBD_KolokwiumPoprawa.Services
             int ifNeededSpecialEq = eq.NeedSpecialEquipment;
 
 
-
-
-
+            //check if truck is available by ID and also if special equipment is not needed
             var truck = dbContext.FireTrucks
                 .Include(fa => fa.FireTruckActions)
                 .ThenInclude(a => a.Action)
@@ -76,6 +75,8 @@ namespace s17624_APBD_KolokwiumPoprawa.Services
                 throw new Exception("Truck doesn't have special equipment or doesn't exists!");
             }
 
+
+            //Check if truck is not assigned
             foreach (var rec in truck.FireTruckActions)
             {
                 if (rec.Action.EndTime == null)
