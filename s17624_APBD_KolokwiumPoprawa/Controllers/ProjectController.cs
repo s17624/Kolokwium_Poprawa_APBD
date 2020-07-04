@@ -8,7 +8,7 @@ using s17624_APBD_KolokwiumPoprawa.Services;
 
 namespace s17624_APBD_KolokwiumPoprawa.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/firefighters")]
     [ApiController]
     public class ProjectController : ControllerBase
     {
@@ -17,6 +17,18 @@ namespace s17624_APBD_KolokwiumPoprawa.Controllers
         public ProjectController(IDbService dbService)
         {
             this.dbService = dbService;
+        }
+
+        [HttpGet]
+        [Route("/{id:int}/actions")]
+        public IActionResult GetActions(int id)
+        {
+            var response = dbService.GetFirefighterActions(id);
+            if (response == null)
+            {
+                return BadRequest("Action does not exists!");
+            }
+            return Ok();
         }
     }
 }
